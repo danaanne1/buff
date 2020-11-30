@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Basic implementation of a struct for a lazy loading, convert on write, in memory serialization mechanism.
+ * Basic implementation of a struct for a lazy loading, convert on write serialization mechanism.
  * 
  * @author Dana
  */

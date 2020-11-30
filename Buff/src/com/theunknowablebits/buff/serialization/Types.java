@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * A container for type conversion methods and constants.
+ * @author Dana
+ */
 public final class Types {
 
 	public static final byte STRUCT = 0x01;
