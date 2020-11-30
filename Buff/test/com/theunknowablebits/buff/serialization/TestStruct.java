@@ -11,9 +11,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.theunknowablebits.buff.serialization.Array;
-import com.theunknowablebits.buff.serialization.Struct;
-
 class TestStruct {
 
 	@BeforeAll
