@@ -45,6 +45,11 @@ public class Array {
 		records.add(index, new Record().withValue(value));
 	}
 	
+	public Object get(int index) {
+		materialize();
+		return records.get(index).value();
+	}
+	
 	public Object remove(int index) {
 		materialize();
 		Record old = records.remove(index);
