@@ -100,4 +100,5 @@ class TestStruct {
 		assertNull(r3.get("Empty"));
 		assertNull(r3.get("Struct"));
 	}
+	
 }
