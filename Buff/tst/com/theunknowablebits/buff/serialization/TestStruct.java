@@ -9,8 +9,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@DisplayName("Struct")
 class TestStruct {
 
 	@BeforeAll
@@ -29,6 +31,7 @@ class TestStruct {
 	void tearDown() throws Exception {
 	}
 
+	@DisplayName("serializes with proper typing")
 	@Test
 	void basicSerialization() {
 		Struct r = testRecord();
@@ -70,6 +73,7 @@ class TestStruct {
 		return r;
 	}
 
+	@DisplayName("handles nesting")
 	@Test
 	void structWithinStruct() {
 		Struct r = testRecord();
