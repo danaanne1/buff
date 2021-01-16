@@ -48,6 +48,11 @@ class TestStruct {
 		assertEquals(5l,r2.get("Long"));
 		assertEquals("Hello World",r2.get("String"));
 		assertNull(r2.get("Empty"));
+		
+		Array a = (Array)r2.get("Array");
+		assertEquals("Hello", a.get(0));
+		assertEquals(4, a.size());
+		assertEquals(3f,a.get(3));
 	}
 
 	private Struct testRecord() {
