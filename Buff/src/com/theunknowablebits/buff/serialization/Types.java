@@ -37,13 +37,13 @@ public final class Types {
 	static {
 		_writers.put(Struct.class, v->((Struct)v).toByteBuffer());
 		_writers.put(Array.class, v->((Array)v).toByteBuffer());
-		_writers.put(Byte.class, v->ByteBuffer.allocate(2).put(BYTE).put((Byte)v).rewind());
-		_writers.put(Character.class, v->ByteBuffer.allocate(3).put(CHAR).putChar((Character)v).rewind());
-		_writers.put(Double.class, v->ByteBuffer.allocate(9).put(DOUBLE).putDouble((Double)v).rewind());
-		_writers.put(Float.class, v->ByteBuffer.allocate(5).put(FLOAT).putFloat((Float)v).rewind());
-		_writers.put(Integer.class, v->ByteBuffer.allocate(5).put(INT).putInt((Integer)v).rewind());
-		_writers.put(Long.class, v->ByteBuffer.allocate(9).put(LONG).putLong((Long)v).rewind());
-		_writers.put(Short.class, v->ByteBuffer.allocate(3).put(SHORT).putShort((Short)v).rewind());
+		_writers.put(Byte.class, v->(ByteBuffer)ByteBuffer.allocate(2).put(BYTE).put((Byte)v).rewind());
+		_writers.put(Character.class, v->(ByteBuffer)ByteBuffer.allocate(3).put(CHAR).putChar((Character)v).rewind());
+		_writers.put(Double.class, v->(ByteBuffer)ByteBuffer.allocate(9).put(DOUBLE).putDouble((Double)v).rewind());
+		_writers.put(Float.class, v->(ByteBuffer)ByteBuffer.allocate(5).put(FLOAT).putFloat((Float)v).rewind());
+		_writers.put(Integer.class, v->(ByteBuffer)ByteBuffer.allocate(5).put(INT).putInt((Integer)v).rewind());
+		_writers.put(Long.class, v->(ByteBuffer)ByteBuffer.allocate(9).put(LONG).putLong((Long)v).rewind());
+		_writers.put(Short.class, v->(ByteBuffer)ByteBuffer.allocate(3).put(SHORT).putShort((Short)v).rewind());
 		_writers.put(Byte.TYPE, _writers.get(Byte.class));
 		_writers.put(Character.TYPE, _writers.get(Character.class));
 		_writers.put(Double.TYPE, _writers.get(Double.class));
@@ -54,7 +54,7 @@ public final class Types {
 		_writers.put(String.class, v-> {
 			ByteBuffer b = ByteBuffer.allocate(((String)v).length()*2+1).put(STRING);
 			b.asCharBuffer().put((String)v);
-			return b.rewind();
+			return (ByteBuffer)b.rewind();
 		});
 		_writers.put(Object.class, Types::writeSerializedObjectToBuffer);
 		
@@ -67,14 +67,17 @@ public final class Types {
 		_readers.put(INT, b->b.getInt(1));
 		_readers.put(LONG, b->b.getLong(1));
 		_readers.put(SHORT, b->b.getShort(1));
-		_readers.put(STRING, b->b.position(1).asCharBuffer().toString());
+		_readers.put(STRING, b->((ByteBuffer)b.position(1)).asCharBuffer().toString());
 		_readers.put(OBJECT, Types::readSerializedObjectFromBuffer);
 		_readers.put(NULL, b->null);
 	}
 
 	private static final Object readSerializedObjectFromBuffer(ByteBuffer buffer) {
 		byte [] b = new byte[buffer.limit()-1];
-		buffer.get(1,b);
+		// int position = buffer.position();
+		buffer.position(1);
+		buffer.get(b);
+		// buffer.position(position);
 		try ( ObjectInputStream oin = new ObjectInputStream(new ByteArrayInputStream(b)) ) {
 			return oin.readObject();
 		} catch (ClassNotFoundException | IOException e ) {

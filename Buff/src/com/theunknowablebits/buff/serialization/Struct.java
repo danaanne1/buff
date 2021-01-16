@@ -41,10 +41,10 @@ public class Struct {
 		records = new HashMap<>();
 		
 		// read all of the keys
-		String [] keys = new String[backingBuffer.position(1).getInt()];
+		String [] keys = new String[((ByteBuffer)backingBuffer.position(1)).getInt()];
 		for (int i = 0; i < keys.length; i++) {
 			int len = backingBuffer.getInt();
-			keys[i] = backingBuffer.slice().limit(len).asCharBuffer().toString();
+			keys[i] = ((ByteBuffer)backingBuffer.slice().limit(len)).asCharBuffer().toString();
 			backingBuffer.position(backingBuffer.position()+len);
 		}
 
@@ -56,7 +56,7 @@ public class Struct {
 
 		// build the map
 		for (int i = 0; i < keys.length; i++) {
-			records.put(keys[i], new Record(backingBuffer.slice().limit(sizes[i])));
+			records.put(keys[i], new Record((ByteBuffer)backingBuffer.slice().limit(sizes[i])));
 			backingBuffer.position(backingBuffer.position()+sizes[i]);
 		}
 		
@@ -73,7 +73,7 @@ public class Struct {
 
 	public ByteBuffer toByteBuffer() {
 		if (records==null)
-			return backingBuffer.rewind();
+			return (ByteBuffer) backingBuffer.rewind();
 		LinkedHashMap<String, ByteBuffer> recordsOut =
 				records
 				.entrySet()
@@ -105,9 +105,9 @@ public class Struct {
 		recordsOut.values().forEach(buffer-> result.putInt(buffer.limit()));
 
 		// write the buffers
-		recordsOut.values().forEach(buffer-> result.put(buffer.rewind()));
+		recordsOut.values().forEach(buffer-> result.put((ByteBuffer)buffer.rewind()));
 		
-		return result.rewind();
+		return (ByteBuffer) result.rewind();
 	}
 	
 }

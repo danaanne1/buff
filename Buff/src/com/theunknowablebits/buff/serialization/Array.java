@@ -68,14 +68,14 @@ public class Array {
 		records = new ArrayList<>();
 		
 		// read all of the sizes
-		int [] sizes = new int[backingBuffer.position(1).getInt()];
+		int [] sizes = new int[((ByteBuffer)backingBuffer.position(1)).getInt()];
 		for (int i = 0; i < sizes.length; i++) {
 			sizes[i] = backingBuffer.getInt();
 		}
 
 		// build the array
 		for (int i = 0; i < sizes.length; i++) {
-			records.add(new Record(backingBuffer.slice().limit(sizes[i])));
+			records.add(new Record( (ByteBuffer) backingBuffer.slice().limit(sizes[i])));
 			backingBuffer.position(backingBuffer.position()+sizes[i]);
 		}
 		
@@ -84,7 +84,7 @@ public class Array {
 
 	public ByteBuffer toByteBuffer() {
 		if (records==null)
-			return backingBuffer.rewind();
+			return (ByteBuffer) backingBuffer.rewind();
 		List<ByteBuffer> toWrite = records.stream().map(r->r.toByteBuffer()).collect(Collectors.toList());  
 		
 		// calculate size
@@ -103,9 +103,9 @@ public class Array {
 		toWrite.forEach(buffer-> result.putInt(buffer.limit()));
 
 		// write the buffers
-		toWrite.forEach(buffer-> result.put(buffer.rewind()));
+		toWrite.forEach(buffer-> result.put((ByteBuffer) buffer.rewind()));
 		
-		return result.rewind();
+		return (ByteBuffer) result.rewind();
 	}
 	
 }
