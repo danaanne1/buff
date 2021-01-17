@@ -70,7 +70,11 @@ public class Struct {
 		return r.value();
 	}
 	
-
+	public boolean has(String key) {
+		materialize();
+		return records.containsKey(key);
+	}
+	
 	public ByteBuffer toByteBuffer() {
 		if (records==null)
 			return (ByteBuffer) backingBuffer.rewind();
