@@ -89,9 +89,10 @@ public class Struct {
 		ByteBuffer result = ByteBuffer.allocate(
 				1 // struct type
 				+ 4 // key count
-				+ recordsOut.keySet().stream().map(v->4+v.length()*2).reduce(0, (a,b)->a+b) // size of all the keys
-				+ (recordsOut.size() * 4) // size of all the sizes
-				+ recordsOut.values().stream().map(v->v.limit()).reduce(0,(a,b)->a+b) // size of all the actuall data buffers
+				+ (recordsOut.size() * 4) // size of the key lengths
+				+ recordsOut.keySet().stream().map(v->v.length()*2).reduce(0, (a,b)->a+b) // size of all the keys
+				+ (recordsOut.size() * 4) // size of the value lengths
+				+ recordsOut.values().stream().map(v->v.limit()).reduce(0,(a,b)->a+b) // size of all the actual data buffers
 		);
 
 		// write the struct descriptor
@@ -102,7 +103,7 @@ public class Struct {
 		recordsOut.keySet().forEach(key-> {
 			result.putInt(key.length()*2);
 			result.asCharBuffer().put(key);
-			result.position(result.position()+key.length()*2);
+			result.position(result.position()+key.length()*2); // because the charBuffer view does not impact position of underlying byte buffer
 		});
 
 		// write the sizes
