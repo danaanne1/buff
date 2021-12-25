@@ -23,6 +23,17 @@ public class Struct {
 		this(ByteBuffer.allocate(5).put(Types.STRUCT).putInt(0));
 	}
 	
+	public String toString() {
+		StringBuffer buffer = new StringBuffer("{");
+		for (String s: keySet())  {
+			buffer.append(s).append("=");
+			buffer.append(get(s).toString()).append(",");
+		}
+		buffer.deleteCharAt(buffer.length()-1);
+		buffer.append("}");
+		return buffer.toString();
+	}
+	
 	public Object put(String key, Object value) {
 		materialize();
 		Object oldValue = get(key);

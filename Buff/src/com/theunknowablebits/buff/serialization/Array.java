@@ -108,4 +108,14 @@ public class Array {
 		return (ByteBuffer) result.rewind();
 	}
 	
+	public String toString() {
+		StringBuffer buffer = new StringBuffer("[");
+		for (int i = 0; i < size(); i++)  {
+			buffer.append(get(i).toString()).append(",");
+		}
+		buffer.deleteCharAt(buffer.length()-1);
+		buffer.append("]");
+		return buffer.toString();
+	}
+
 }
